@@ -1,0 +1,4 @@
+../source/analog_in.c:33:6:TPM1_init	8	static
+../source/analog_in.c:55:6:ADC_init	8	static
+../source/analog_in.c:80:6:ADC_sampling	16	static
+../source/analog_in.c:110:6:ADC_analysis	40	static
