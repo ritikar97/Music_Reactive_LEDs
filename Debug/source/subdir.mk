@@ -5,33 +5,27 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../source/analog_in.c \
-../source/dma.c \
 ../source/led_out.c \
 ../source/main.c \
 ../source/mtb.c \
 ../source/neopixel_lib.c \
-../source/semihost_hardfault.c \
-../source/timers.c 
+../source/semihost_hardfault.c 
 
 OBJS += \
 ./source/analog_in.o \
-./source/dma.o \
 ./source/led_out.o \
 ./source/main.o \
 ./source/mtb.o \
 ./source/neopixel_lib.o \
-./source/semihost_hardfault.o \
-./source/timers.o 
+./source/semihost_hardfault.o 
 
 C_DEPS += \
 ./source/analog_in.d \
-./source/dma.d \
 ./source/led_out.d \
 ./source/main.d \
 ./source/mtb.d \
 ./source/neopixel_lib.d \
-./source/semihost_hardfault.d \
-./source/timers.d 
+./source/semihost_hardfault.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

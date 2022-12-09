@@ -109,26 +109,4 @@ void ADC_sampling()
 }
 
 
-void ADC_analysis()
-{
-	uint32_t min, max, sum = 0;
-	min = max = adc_sample_buff[0];
-
-	/* Cycle through the buffer to calculate min, max and avg */
-	for(uint32_t i = 1; i < SAMPLING_SIZE; i++)
-	{
-		if(adc_sample_buff[i] < min)
-		{
-			min = adc_sample_buff[i];
-		}
-		if(adc_sample_buff[i] > max)
-		{
-			max = adc_sample_buff[i];
-		}
-		sum += adc_sample_buff[i];
-	}
-	PRINTF("min = %d max = %d avg = %d period = %d samples frequency = %d Hz\n",
-			min, max, (sum/SAMPLING_SIZE), adc_period, SAMPLING_RATE/adc_period);
-}
-
 

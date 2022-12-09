@@ -1,0 +1,5 @@
+../source/neopixel_lib.c:76:6:Neo_SetPixel.part.0	20	static
+../source/neopixel_lib.c:45:6:Neo_ClearAllPixel	16	static
+../source/neopixel_lib.c:37:6:Neo_init	16	static
+../source/neopixel_lib.c:76:6:Neo_SetPixel	8	static
+../source/neopixel_lib.c:97:6:Neo_Transfer	0	static

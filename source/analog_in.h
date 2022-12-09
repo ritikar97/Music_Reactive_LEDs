@@ -49,15 +49,6 @@ void ADC_init();
 void ADC_sampling();
 
 
-/*
- * ADC_analysis: Function to print analysis data after
- * ADC sampling
- *
- * Parameters: none
- *
- * Returns: void
- */
-void ADC_analysis();
 
 
 #endif /* ANALOG_IN_H_ */

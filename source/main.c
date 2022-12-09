@@ -42,8 +42,7 @@
 #include "analog_in.h"
 #include "neopixel_lib.h"
 #include "led_out.h"
-#include "timers.h"
-#include "dma.h"
+
 
 /* TODO: insert other include files here. */
 
@@ -66,8 +65,9 @@ int main(void) {
     PRINTF("Hello World\n");
     //ADC_init();
     //TPM1_init();
-    DMA_init();
-    TPM0_init();
+//    DMA_init();
+//    DMA_SetValues();
+//    TPM0_init();
 
     GPIO_init();
 

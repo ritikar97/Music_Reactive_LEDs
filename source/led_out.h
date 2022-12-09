@@ -14,4 +14,11 @@ void DMA_SetValues();
 
 void Neo_output();
 
+void clock_init();
+
+void DMA_init();
+
+void TPM0_init();
+
+
 #endif /* LED_OUT_H_ */
