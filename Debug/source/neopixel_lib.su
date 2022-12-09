@@ -4,6 +4,6 @@
 ../source/neopixel_lib.c:58:17:Neo_SetColor	32	static
 ../source/neopixel_lib.c:78:16:Neo_GetColor	24	static
 ../source/neopixel_lib.c:94:6:Neo_SetPixel	40	static
-../source/neopixel_lib.c:122:6:Neo_PixelBrightness	48	static
-../source/neopixel_lib.c:139:10:Neo_GetPixel	32	static
-../source/neopixel_lib.c:159:6:Neo_PixelTrail	40	static
+../source/neopixel_lib.c:122:6:Neo_PixelBrightness	40	static
+../source/neopixel_lib.c:139:6:Neo_GetPixel	40	static
+../source/neopixel_lib.c:158:6:Neo_PixelTrail	40	static

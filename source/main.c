@@ -84,23 +84,23 @@ int main(void) {
     //init_systick();
     //GPIO_config();
     Neo_output();
-    Neo_loop(colors);
+    /*Neo_loop(colors);
     for(uint32_t i = 0; i < 65000; i++);
     Neo_loop(colors);
         for(uint32_t i = 0; i < 65000; i++);
         Neo_loop(colors);
             for(uint32_t i = 0; i < 65000; i++);
             Neo_loop(colors);
-                for(uint32_t i = 0; i < 65000; i++);
+                for(uint32_t i = 0; i < 65000; i++);*/
 
     //Neo_loop();
 
     while(1)
     {
 
-    	//input_sample = ADC_sampling();
-    	//colors = calculate_color(input_sample);
-    	//Neo_loop(colors);
+    	input_sample = ADC_sampling();
+    	colors = calculate_color(input_sample);
+    	Neo_loop(colors);
 
     	//PRINTF("Value of input data is [%d]\n", PTE -> PDIR);
     }
