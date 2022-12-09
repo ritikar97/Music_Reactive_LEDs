@@ -89,7 +89,7 @@ uint32_t ADC_sampling()
 	TPM1 -> SC |= TPM_SC_CMOD(1);
 
 	/* Check for conversion completion and fill buffer*/
-	for(uint32_t i = 0; i < 1000; i++)
+	for(uint32_t i = 0; i < 200; i++)
 	{
 		/* Wait on completion flag */
 		while(!(ADC0 -> SC1[0] & ADC_SC1_COCO_MASK));

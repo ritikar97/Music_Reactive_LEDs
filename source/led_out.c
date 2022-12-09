@@ -182,7 +182,7 @@ void Neo_output()
 }
 
 
-void Neo_loop(RGB new_colors)
+void Neo_loop(RGB new_colors  )
 {
 
 	//RGB new_colors = {240, 230, 2};

@@ -14,11 +14,13 @@
 #define MAX_SAMPLE (56000)
 #define MOD_4 (0x3)
 
-uint8_t constant_multipliers[MOD_4 + 1][3] = {{255, 255, 255}, {255, 25, 2}, {2, 255, 25}, {25, 2, 255}};
+uint8_t constant_multipliers[3][3] = {{255, 25, 2}, {2, 255, 25}, {25, 2, 255}};
 
 void calculate_color(uint32_t input_sample, uint8_t* colors)
 {
-	uint8_t remainder = input_sample & MOD_4;
+	uint8_t remainder = input_sample % 3;
+
+	PRINTF("Input sample is %d and remainder is %d\n", input_sample, remainder);
 
 	colors[RED] = constant_multipliers[remainder][0];// * (input_sample - MIN_SAMPLE) * 10) / 60000;
 	colors[GREEN] = constant_multipliers[remainder][1];// * (input_sample - MIN_SAMPLE) * 10) / 60000;
