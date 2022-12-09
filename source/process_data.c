@@ -20,9 +20,9 @@ void calculate_color(uint32_t input_sample, uint8_t* colors)
 {
 	uint8_t remainder = input_sample & MOD_4;
 
-	colors[RED] = (constant_multipliers[remainder][0] * (input_sample - MIN_SAMPLE) * 1000) / 60000;
-	colors[RED] = (constant_multipliers[remainder][1] * (input_sample - MIN_SAMPLE) * 1000) / 60000;
-	colors[RED] = (constant_multipliers[remainder][2] * (input_sample - MIN_SAMPLE) * 1000) / 60000;
+	colors[RED] = constant_multipliers[remainder][0];// * (input_sample - MIN_SAMPLE) * 10) / 60000;
+	colors[GREEN] = constant_multipliers[remainder][1];// * (input_sample - MIN_SAMPLE) * 10) / 60000;
+	colors[BLUE] = constant_multipliers[remainder][2]; //* (input_sample - MIN_SAMPLE) * 10) / 60000;
 
 
 //	if(remainder == 0)
