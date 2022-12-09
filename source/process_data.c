@@ -13,9 +13,8 @@
 #define MIN_SAMPLE (43000)
 #define MAX_SAMPLE (56000)
 
-uint8_t* calculate_color(uint32_t input_sample)
+void calculate_color(uint32_t input_sample, uint8_t* colors)
 {
-	uint8_t* colors = (uint8_t*)malloc(sizeof(uint8_t)*NUM_COLORS);
 	if(input_sample < MIN_SAMPLE)
 	{
 		colors[RED] = 255;
@@ -76,6 +75,5 @@ uint8_t* calculate_color(uint32_t input_sample)
 		colors[GREEN] = (input_sample - MIN_SAMPLE) / 150;
 		colors[BLUE] = (input_sample - MIN_SAMPLE) / 150;
 	}
-	return colors;
 }
 

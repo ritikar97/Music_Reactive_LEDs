@@ -121,7 +121,6 @@ void Neo_SetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, RGB colors)
 
 void Neo_PixelBrightness(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t percent)
 {
-  //uint8_t* colors = (uint8_t*)malloc(sizeof(uint8_t)*NUM_COLORS);
 	uint8_t colors[NUM_COLORS];
   RGB dimmed_colors;
   Neo_GetPixel(LED_buffer, pixel_idx, colors);
@@ -138,8 +137,6 @@ void Neo_PixelBrightness(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t perce
 
 void Neo_GetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t* colors)
 {
-	//uint8_t* colors = (uint8_t*)malloc(sizeof(uint8_t)*NUM_COLORS);
-
   if (pixel_idx >= NEO_NUM_LEDS)
   {
     return;

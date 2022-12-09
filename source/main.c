@@ -63,10 +63,7 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
-    uint8_t* colors = (uint8_t*)malloc(3);
-    colors[0] = 0;
-    colors[1] = 255;
-    colors[2] = 10;
+    uint8_t colors[NUM_COLORS];
     uint32_t input_sample;
     PRINTF("Hello World\n");
     clock_init();
@@ -97,9 +94,10 @@ int main(void) {
 
     while(1)
     {
-
     	input_sample = ADC_sampling();
-    	colors = calculate_color(input_sample);
+
+    	calculate_color(input_sample, colors);
+
     	Neo_loop(colors);
 
     	//PRINTF("Value of input data is [%d]\n", PTE -> PDIR);

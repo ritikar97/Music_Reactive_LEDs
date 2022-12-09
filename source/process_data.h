@@ -8,7 +8,7 @@
 #ifndef PROCESS_DATA_H_
 #define PROCESS_DATA_H_
 
-uint8_t* calculate_color(uint32_t input_sample);
+void calculate_color(uint32_t input_sample, uint8_t* colors);
 
 
 #endif /* PROCESS_DATA_H_ */
