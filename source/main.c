@@ -63,24 +63,27 @@ int main(void) {
 #endif
 
     PRINTF("Hello World\n");
-    //ADC_init();
-    //TPM1_init();
-//    DMA_init();
-//    DMA_SetValues();
-//    TPM0_init();
-
+    clock_init();
+    ADC_init();
+    TPM1_init();
     GPIO_init();
+    DMA_init();
+//    DMA_SetValues();
+    TPM0_init();
+
+
 
 
     //ADC_sampling();
     //init_systick();
     //GPIO_config();
     Neo_output();
+    Neo_loop();
 
     while(1)
     {
 
-    	//ADC_sampling();
+    	ADC_sampling();
     	//PRINTF("Value of input data is [%d]\n", PTE -> PDIR);
     }
 

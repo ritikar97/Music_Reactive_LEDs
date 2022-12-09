@@ -10,7 +10,7 @@
 
 #include "common_defines.h"
 
-#define NEO_NUM_LEDS (1)
+#define NEO_NUM_LEDS (20)
 #define NEO_BITS_INIT (3)
 #define NEO_BITS_LEDS (24)
 #define NEO_BITS_LATCH (10)
@@ -26,6 +26,11 @@ void Neo_init(uint16_t* LED_buffer);
 void Neo_ClearAllPixel(uint16_t* LED_buffer);
 void Neo_SetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, RGB colors);
 void Neo_Transfer(void);
+void Neo_PixelBrightness(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t percent);
+uint8_t* Neo_GetPixel(uint16_t* LED_buffer, uint32_t pixel_idx);
+void Neo_PixelTrail(uint16_t* LED_buffer, RGB colors, uint32_t first_pixel_idx, uint32_t last_pixel_idx,
+		uint32_t num_trail, uint8_t percent_dim);
+
 
 
 #endif /* NEOPIXEL_LIB_H_ */

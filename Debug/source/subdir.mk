@@ -9,6 +9,7 @@ C_SRCS += \
 ../source/main.c \
 ../source/mtb.c \
 ../source/neopixel_lib.c \
+../source/process_data.c \
 ../source/semihost_hardfault.c 
 
 OBJS += \
@@ -17,6 +18,7 @@ OBJS += \
 ./source/main.o \
 ./source/mtb.o \
 ./source/neopixel_lib.o \
+./source/process_data.o \
 ./source/semihost_hardfault.o 
 
 C_DEPS += \
@@ -25,6 +27,7 @@ C_DEPS += \
 ./source/main.d \
 ./source/mtb.d \
 ./source/neopixel_lib.d \
+./source/process_data.d \
 ./source/semihost_hardfault.d 
 
 

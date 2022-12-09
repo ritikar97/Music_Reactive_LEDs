@@ -1,6 +1,9 @@
-../source/neopixel_lib.c:19:13:clear_LED_buffer	24	static
-../source/neopixel_lib.c:37:6:Neo_init	16	static
-../source/neopixel_lib.c:45:6:Neo_ClearAllPixel	32	static
-../source/neopixel_lib.c:56:17:Neo_SetColor	32	static
-../source/neopixel_lib.c:76:6:Neo_SetPixel	40	static
-../source/neopixel_lib.c:97:6:Neo_Transfer	8	static
+../source/neopixel_lib.c:20:13:clear_LED_buffer	24	static
+../source/neopixel_lib.c:38:6:Neo_init	16	static
+../source/neopixel_lib.c:46:6:Neo_ClearAllPixel	32	static
+../source/neopixel_lib.c:57:17:Neo_SetColor	32	static
+../source/neopixel_lib.c:77:16:Neo_GetColor	24	static
+../source/neopixel_lib.c:93:6:Neo_SetPixel	40	static
+../source/neopixel_lib.c:121:6:Neo_PixelBrightness	48	static
+../source/neopixel_lib.c:138:10:Neo_GetPixel	32	static
+../source/neopixel_lib.c:158:6:Neo_PixelTrail	40	static

@@ -4,7 +4,9 @@ C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs
 ../source/led_out.c:30:6:GPIO_init	8	static
 ../source/led_out.c:44:6:clock_init	8	static
 ../source/led_out.c:84:6:DMA_init	8	static
-../source/led_out.c:139:6:TPM0_init	8	static
-../source/led_out.c:172:6:DMA0_IRQHandler	16	static
-../source/led_out.c:212:6:Neo_output	16	static
-../source/led_out.c:248:6:DMA_SetValues	8	static
+../source/led_out.c:115:6:TPM0_init	8	static
+../source/led_out.c:140:6:DMA0_IRQHandler	16	static
+../source/led_out.c:177:6:Neo_output	8	static
+../source/led_out.c:185:6:Neo_loop	24	static
+../source/led_out.c:194:6:DMA_SetValues	8	static
+../source/led_out.c:211:6:Neo_UpdateStrip	8	static

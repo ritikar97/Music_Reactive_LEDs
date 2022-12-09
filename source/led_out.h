@@ -20,5 +20,9 @@ void DMA_init();
 
 void TPM0_init();
 
+void Neo_UpdateStrip();
+
+void Neo_loop();
+
 
 #endif /* LED_OUT_H_ */

@@ -18,10 +18,10 @@
 
 
 
-#define MOD_VAL (48000000) /* (48MHz / 96 kHz) */
+#define MOD_VAL (48000) /* (48MHz / 0.33 Hz) : Sampling takes place once in 3 seconds */
 #define ADC_POS (20) /* PORT E, pin 20 is used an input for ADC */
 #define SAMPLING_SIZE (1024) /* ADC sampling size */
-//#define AD23_CH (23) /* ADC channel 23 is used to direct DAC output to ADC input */
+#define AD0_CH (0) /* ADC channel 0 is used to collect ADC input */
 #define ADC0_TPM1_TRIG (9) /* Using TPM1 as hardware trigger for ADC */
 #define SAMPLING_RATE (96000) /* Sampling frequency */
 
@@ -47,7 +47,7 @@ void TPM1_init()
 	TPM1 -> CNT = 0;
 	TPM1 -> MOD = TPM_MOD_MOD(MOD_VAL);
 
-	/* Set TPM to count up and divide by 0 prescalar and enable DMA on overflow, enable interrupt */
+	/* Set TPM to count up and divide by 0 prescalar */
 	TPM1 -> SC |= (TPM_SC_PS(0));
 
 }
@@ -73,23 +73,24 @@ void ADC_init()
 	/* Hardware trigger, voltage references VREFH and VREFL */
 	ADC0 -> SC2 |= ADC_SC2_REFSEL(0) | ADC_SC2_ADTRG(1);
 
-	/* Conversion interrupt disabled, input channel 23 is selected */
-	ADC0->SC1[0] = ADC_SC1_AIEN(0) | ADC_SC1_ADCH(0);
+	/* Conversion interrupt disabled, input channel 0 is selected */
+	ADC0->SC1[0] = ADC_SC1_AIEN(0) | ADC_SC1_ADCH(AD0_CH);
 }
 
 
 /* Collecting ADC Samples */
 void ADC_sampling()
 {
+	uint32_t adc_sample;
 	/* Start TPM1 */
 	TPM1 -> SC |= TPM_SC_CMOD(1);
 
 	/* Check for conversion completion and fill buffer*/
-	for(uint32_t i = 0; i < SAMPLING_SIZE; i++)
+	for(uint32_t i = 0; i < 2000; i++)
 	{
 		/* Wait on completion flag */
 		while(!(ADC0 -> SC1[0] & ADC_SC1_COCO_MASK));
-		adc_sample_buff[i] = ADC0 -> R[0];
+		adc_sample = ADC0 -> R[0];
 
 	}
 
@@ -102,10 +103,10 @@ void ADC_sampling()
 	/* Print analysis data */
 	//DAC_analysis();
 	//ADC_analysis();
-	for(uint32_t i = 0; i < 10; i++)
-	{
-	  PRINTF("Value of arr[[%d] = %d\n", i, adc_sample_buff[i]);
-	 }
+	//for(uint32_t i = 0; i < 1024; i++)
+	//{
+	  PRINTF("Value of adc_sample = %d\n", adc_sample);
+	 //}
 }
 
 
