@@ -40,8 +40,11 @@
 #include "MKL25Z4.h"
 #include "fsl_debug_console.h"
 #include "analog_in.h"
-//#include "sensor_in.h"
-//#include "delay.h"
+#include "neopixel_lib.h"
+#include "led_out.h"
+#include "timers.h"
+#include "dma.h"
+
 /* TODO: insert other include files here. */
 
 /* TODO: insert other definitions and declarations here. */
@@ -61,17 +64,23 @@ int main(void) {
 #endif
 
     PRINTF("Hello World\n");
-    ADC_init();
-    TPM1_init();
+    //ADC_init();
+    //TPM1_init();
+    DMA_init();
+    TPM0_init();
+
+    GPIO_init();
 
 
-    ADC_sampling();
+    //ADC_sampling();
     //init_systick();
     //GPIO_config();
+    Neo_output();
 
     while(1)
     {
-    	ADC_sampling();
+
+    	//ADC_sampling();
     	//PRINTF("Value of input data is [%d]\n", PTE -> PDIR);
     }
 

@@ -14,6 +14,8 @@
 #include "analog_in.h"
 #include <stdio.h>
 #include "fsl_debug_console.h"
+#include "common_defines.h"
+
 
 
 #define MOD_VAL (48000000) /* (48MHz / 96 kHz) */

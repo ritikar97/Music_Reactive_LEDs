@@ -1,0 +1,6 @@
+../source/neopixel_lib.c:19:13:clear_LED_buffer	24	static
+../source/neopixel_lib.c:37:6:Neo_init	16	static
+../source/neopixel_lib.c:45:6:Neo_ClearAllPixel	32	static
+../source/neopixel_lib.c:56:17:Neo_SetColor	32	static
+../source/neopixel_lib.c:76:6:Neo_SetPixel	40	static
+../source/neopixel_lib.c:97:6:Neo_Transfer	8	static
