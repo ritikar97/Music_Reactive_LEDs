@@ -6,6 +6,7 @@
  */
 
 #include "neopixel_lib.h"
+#include "led_out.h"
 #include "common_defines.h"
 
 
@@ -158,21 +159,22 @@ uint8_t* Neo_GetPixel(uint16_t* LED_buffer, uint32_t pixel_idx)
 void Neo_PixelTrail(uint16_t* LED_buffer, RGB colors, uint32_t first_pixel_idx, uint32_t last_pixel_idx,
 		uint32_t num_trail, uint8_t percent_dim)
 {
-  uint32_t pixel_num;
+  uint32_t pixel_num = 0;
   for(pixel_num = first_pixel_idx; pixel_num <= last_pixel_idx + num_trail + 1; pixel_num++)
   {
-
+  	PRINTF("Hey %d\n", pixel_num);
     if(pixel_num <= last_pixel_idx)
     {
       Neo_SetPixel(LED_buffer, pixel_num, colors);
     }
-
+    PRINTF("You\n");
     if(pixel_num - first_pixel_idx > num_trail &&
     		pixel_num - (num_trail + 1) <= last_pixel_idx)
     {
       Neo_SetPixel(LED_buffer, (pixel_num - num_trail - 1), clear_pixel);
     }
 
+    PRINTF("Let\n");
     for(uint8_t i = 0; i < num_trail; i++)
     {
       if ((pixel_num - first_pixel_idx > i) && (pixel_num - (i + 1) <= last_pixel_idx))
@@ -180,7 +182,7 @@ void Neo_PixelTrail(uint16_t* LED_buffer, RGB colors, uint32_t first_pixel_idx, 
         Neo_PixelBrightness(LED_buffer, pixel_num - i - 1, percent_dim);
       }
     }
-
+    PRINTF("Go\n");
     Neo_UpdateStrip();
 
     /* Delay */

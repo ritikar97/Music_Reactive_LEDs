@@ -10,7 +10,7 @@
 
 #include "common_defines.h"
 
-#define NEO_NUM_LEDS (20)
+#define NEO_NUM_LEDS (30)
 #define NEO_BITS_INIT (3)
 #define NEO_BITS_LEDS (24)
 #define NEO_BITS_LATCH (10)

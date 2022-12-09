@@ -182,11 +182,11 @@ void Neo_output()
 }
 
 
-void Neo_loop()
+void Neo_loop(RGB new_colors)
 {
 
-	RGB new_colors = {240, 230, 2};
-	Neo_PixelTrail(LED_buffer, new_colors, 0, 15, 3, 25);
+	//RGB new_colors = {240, 230, 2};
+	Neo_PixelTrail(LED_buffer, new_colors, 0, 5, 4, 25);
 
 }
 
@@ -212,7 +212,7 @@ void Neo_UpdateStrip()
 {
 	DMA_SetValues();
 	while(!transfer_done);
-	transfer_done = 0;
+  transfer_done = 0;
 }
 
 //void Neo_PixelTrail(uint16_t* LED_buffer, RGB colors)

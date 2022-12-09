@@ -19,7 +19,7 @@ source/main.o source/main.d: ../source/main.c \
  C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\CMSIS/MKL25Z4.h \
  C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\utilities/fsl_debug_console.h \
  ../source/analog_in.h ../source/neopixel_lib.h \
- ../source/common_defines.h ../source/led_out.h
+ ../source/common_defines.h ../source/led_out.h ../source/process_data.h
 C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\board/board.h:
 C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\board/clock_config.h:
 C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\drivers/fsl_common.h:
@@ -43,3 +43,4 @@ C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs
 ../source/neopixel_lib.h:
 ../source/common_defines.h:
 ../source/led_out.h:
+../source/process_data.h:

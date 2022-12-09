@@ -22,7 +22,7 @@ void TPM0_init();
 
 void Neo_UpdateStrip();
 
-void Neo_loop();
+void Neo_loop(RGB new_colors);
 
 
 #endif /* LED_OUT_H_ */

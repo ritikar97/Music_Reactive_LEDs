@@ -29,6 +29,8 @@
 /* Buffer to hold ADC samples */
 uint16_t adc_sample_buff[SAMPLING_SIZE];
 int adc_period;
+uint32_t min = 50000;
+uint32_t max = 48000;
 
 
 /* TPM1 Initialization */
@@ -79,9 +81,10 @@ void ADC_init()
 
 
 /* Collecting ADC Samples */
-void ADC_sampling()
+uint32_t ADC_sampling()
 {
 	uint32_t adc_sample;
+
 	/* Start TPM1 */
 	TPM1 -> SC |= TPM_SC_CMOD(1);
 
@@ -91,6 +94,14 @@ void ADC_sampling()
 		/* Wait on completion flag */
 		while(!(ADC0 -> SC1[0] & ADC_SC1_COCO_MASK));
 		adc_sample = ADC0 -> R[0];
+		if(adc_sample > max)
+		{
+			max = adc_sample;
+		}
+		if(adc_sample < min)
+		{
+			min = adc_sample;
+		}
 
 	}
 
@@ -105,8 +116,9 @@ void ADC_sampling()
 	//ADC_analysis();
 	//for(uint32_t i = 0; i < 1024; i++)
 	//{
-	  PRINTF("Value of adc_sample = %d\n", adc_sample);
+	 // PRINTF("Value of adc_sample = %d, min = %d, max = %d\n", adc_sample, min, max);
 	 //}
+	return adc_sample;
 }
 
 

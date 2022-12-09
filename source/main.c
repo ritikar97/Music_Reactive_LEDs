@@ -42,6 +42,7 @@
 #include "analog_in.h"
 #include "neopixel_lib.h"
 #include "led_out.h"
+#include "process_data.h"
 
 
 /* TODO: insert other include files here. */
@@ -62,6 +63,11 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
+    uint8_t* colors = (uint8_t*)malloc(3);
+    colors[0] = 0;
+    colors[1] = 255;
+    colors[2] = 10;
+    uint32_t input_sample;
     PRINTF("Hello World\n");
     clock_init();
     ADC_init();
@@ -78,12 +84,24 @@ int main(void) {
     //init_systick();
     //GPIO_config();
     Neo_output();
-    Neo_loop();
+    Neo_loop(colors);
+    for(uint32_t i = 0; i < 65000; i++);
+    Neo_loop(colors);
+        for(uint32_t i = 0; i < 65000; i++);
+        Neo_loop(colors);
+            for(uint32_t i = 0; i < 65000; i++);
+            Neo_loop(colors);
+                for(uint32_t i = 0; i < 65000; i++);
+
+    //Neo_loop();
 
     while(1)
     {
 
-    	ADC_sampling();
+    	//input_sample = ADC_sampling();
+    	//colors = calculate_color(input_sample);
+    	//Neo_loop(colors);
+
     	//PRINTF("Value of input data is [%d]\n", PTE -> PDIR);
     }
 

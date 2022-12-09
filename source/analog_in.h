@@ -46,7 +46,7 @@ void ADC_init();
  *
  * Returns: void
  */
-void ADC_sampling();
+uint32_t ADC_sampling();
 
 
 
