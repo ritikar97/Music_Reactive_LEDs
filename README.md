@@ -9,7 +9,7 @@ Code for Final Project of PES, Fall 2022, ECEN-5813(B)
 - [Challenges](#challenges)
 - [Demo Video](#demo-video)
 - [References](#references)
-- [Acknowledgement](#acknowledgement)
+- [Acknowledgements](#acknowledgement)
 
 
 ## Project Functionality 
@@ -33,10 +33,16 @@ Initializing DMA and TPM0 to continuously generate PWM pulses with precise timin
 
 
 
-## References
+## References 
 
-## Acknowledgement
+[WS2812B reference](https://cdn-shop.adafruit.com/datasheets/WS2812.pdf)   
+[Alexander G. Dean for initialization routines](https://github.com/alexander-g-dean/ESF/tree/master/NXP/Code)  
+[Generating continuous PWM pulses - NXP App Note](https://www.nxp.com/docs/en/application-note/AN5121.pdf)  
+[Neopixel Library reference](https://github.com/ErichStyger/mcuoneclipse/tree/master/Examples/Eclipse/FRDM-KL25Z/FRDM-KL25Z_NeoPixel)  
 
+## Acknowledgements 
+
+I would like to thank Nimish Bhide for his time to help me debug several of my issues, and Ajay Kandagal for his help with RTOS. 
 
 
 
