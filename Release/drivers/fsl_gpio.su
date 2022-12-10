@@ -1,3 +1,0 @@
-../drivers/fsl_gpio.c:73:6:GPIO_PinInit	0	static
-../drivers/fsl_gpio.c:88:10:GPIO_GetPinsInterruptFlags	0	static
-../drivers/fsl_gpio.c:97:6:GPIO_ClearPinsInterruptFlags	0	static

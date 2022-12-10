@@ -1,6 +1,0 @@
-C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\CMSIS/core_cm0plus.h:804:22:NVIC_SetPriority	24	static
-../source/delay.c:21:6:init_systick	8	static
-../source/delay.c:43:12:now	8	static
-../source/delay.c:49:6:SysTick_msDelay	24	static
-../source/delay.c:69:6:SysTick_Handler	8	static
-../source/delay.c:76:10:read_input_val	8	static

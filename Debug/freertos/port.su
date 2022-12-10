@@ -1,0 +1,13 @@
+../freertos/port.c:125:14:pxPortInitialiseStack	24	static
+../freertos/port.c:143:13:prvTaskExitError	8	static
+../freertos/port.c:157:6:SVC_Handler	8	static
+../freertos/port.c:164:6:vPortStartFirstTask	0	static
+../freertos/port.c:194:12:xPortStartScheduler	8	static
+../freertos/port.c:221:6:vPortEndScheduler	8	static
+../freertos/port.c:229:6:vPortYield	8	static
+../freertos/port.c:241:6:vPortEnterCritical	8	static
+../freertos/port.c:250:6:vPortExitCritical	8	static
+../freertos/port.c:261:10:ulSetInterruptMaskFromISR	0	static
+../freertos/port.c:274:6:vClearInterruptMaskFromISR	0	static
+../freertos/port.c:286:6:PendSV_Handler	0	static
+../freertos/port.c:334:6:SysTick_Handler	16	static

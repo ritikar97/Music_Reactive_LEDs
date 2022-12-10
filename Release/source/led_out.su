@@ -1,6 +1,0 @@
-../source/led_out.c:29:6:GPIO_init	0	static
-../source/led_out.c:43:6:clock_init	0	static
-../source/led_out.c:56:6:DMA_init	0	static
-../source/led_out.c:84:6:TPM0_init	0	static
-../source/led_out.c:106:6:DMA0_IRQHandler	16	static
-../source/led_out.c:148:6:Neo_output	16	static

@@ -20,8 +20,7 @@ void calculate_color(uint32_t input_sample, uint8_t* colors)
 {
 	uint8_t remainder = input_sample % 3;
 
-	PRINTF("Input sample is %d and remainder is %d\n", input_sample, remainder);
-
+  PRINTF("Sample input = %d, remainder = %d\n", input_sample, remainder);
 	colors[RED] = constant_multipliers[remainder][0];// * (input_sample - MIN_SAMPLE) * 10) / 60000;
 	colors[GREEN] = constant_multipliers[remainder][1];// * (input_sample - MIN_SAMPLE) * 10) / 60000;
 	colors[BLUE] = constant_multipliers[remainder][2]; //* (input_sample - MIN_SAMPLE) * 10) / 60000;

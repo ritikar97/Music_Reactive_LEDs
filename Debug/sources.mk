@@ -17,6 +17,7 @@ SUBDIRS := \
 CMSIS \
 board \
 drivers \
+freertos \
 source \
 startup \
 utilities \

@@ -1,2 +1,2 @@
-C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\drivers/fsl_clock.h:620:20:CLOCK_SetLpsci0Clock	16	static
+C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\frdmkl25z_rtos_examples_freertos_hello_project\drivers/fsl_clock.h:620:20:CLOCK_SetLpsci0Clock	16	static
 ../board/board.c:44:6:BOARD_InitDebugConsole	16	static

@@ -32,17 +32,53 @@
  * @file    MKL25Z4_Project.c
  * @brief   Application entry point.
  */
+
+/* FreeRTOS kernel includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
+
+/* Freescale includes. */
+#include "fsl_device_registers.h"
+#include "pin_mux.h"
 #include <stdio.h>
 #include "board.h"
-#include "peripherals.h"
 #include "pin_mux.h"
 #include "clock_config.h"
+#include "peripherals.h"
 #include "MKL25Z4.h"
 #include "fsl_debug_console.h"
 #include "analog_in.h"
 #include "neopixel_lib.h"
 #include "led_out.h"
 #include "process_data.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+
+/* Task priorities. */
+#define ADC_task_PRIORITY (configMAX_PRIORITIES - 1)
+#define neopixel_task_PRIORITY (configMAX_PRIORITIES - 2)
+#define process_tak_PRIORITY (configMAX_PRIORITIES - 3)
+#define GREEN (0)
+#define RED (1)
+#define BLUE (2)
+
+/* Task Prototypes */
+static void ADC_task(void *pvParameters);
+static void neopixel_task(void *pvParameters);
+static void process_task(void *pvParameters);
+
+TaskHandle_t ADC_handle;
+TaskHandle_t neopixel_handle;
+TaskHandle_t process_handle;
+
+QueueHandle_t xQueue_sample;
+SemaphoreHandle_t xMutex;
+
+uint8_t colors[NUM_COLORS];
 
 
 /* TODO: insert other include files here. */
@@ -63,54 +99,84 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
-    uint8_t colors[NUM_COLORS];
-    uint32_t input_sample;
+
+    xMutex = xSemaphoreCreateMutex();
     PRINTF("Hello World\n");
     clock_init();
     ADC_init();
     TPM1_init();
     GPIO_init();
     DMA_init();
-//    DMA_SetValues();
     TPM0_init();
-
-
-
-
-    //ADC_sampling();
-    //init_systick();
-    //GPIO_config();
     Neo_output();
-    /*Neo_loop(colors);
-    for(uint32_t i = 0; i < 65000; i++);
-    Neo_loop(colors);
-        for(uint32_t i = 0; i < 65000; i++);
-        Neo_loop(colors);
-            for(uint32_t i = 0; i < 65000; i++);
-            Neo_loop(colors);
-                for(uint32_t i = 0; i < 65000; i++);*/
 
-    //Neo_loop();
+    xQueue_sample = xQueueCreate(1, sizeof(uint32_t));
 
+    xTaskCreate(ADC_task, "ADC_task", configMINIMAL_STACK_SIZE + 10, NULL, ADC_task_PRIORITY, &ADC_handle);
+    xTaskCreate(neopixel_task, "neopixel_task", configMINIMAL_STACK_SIZE + 10, NULL, neopixel_task_PRIORITY, &neopixel_handle);
+    xTaskCreate(process_task, "process_task", configMINIMAL_STACK_SIZE + 10, NULL, ADC_task_PRIORITY, &process_handle);
+
+
+    vTaskStartScheduler();
     while(1)
     {
-    	input_sample = ADC_sampling();
-
-    	calculate_color(input_sample, colors);
-
-    	Neo_loop(colors);
-
-    	//PRINTF("Value of input data is [%d]\n", PTE -> PDIR);
     }
 
-    /* Force the counter to be placed into memory. */
-    //volatile static int i = 0 ;
-    /* Enter an infinite loop, just incrementing a counter. */
-    //while(1) {
-        //i++ ;
-        /* 'Dummy' NOP to allow source level single stepping of
-            tight while() loop */
-        //__asm volatile ("nop");
-    //}
     return 0 ;
 }
+
+
+static void ADC_task(void *pvParameters)
+{
+	uint32_t input_sample = ADC_sampling();
+
+	uint32_t TickDelay = pdMS_TO_TICKS(20);
+	PRINTF("Inside ADC task\n");
+
+	while(1)
+	{
+		if(xQueueSend(xQueue_sample, &input_sample, 0) != pdPASS)
+		{
+			PRINTF("ERROR in adding to queue\n");
+		}
+		vTaskDelay(TickDelay);
+	}
+}
+
+
+static void process_task(void *pvParameters)
+{
+	uint32_t input_sample = 0;
+	uint32_t TickDelay = pdMS_TO_TICKS(30);
+	PRINTF("Inside process task\n");
+
+	//Wait on Queue Receieve
+	while(1)
+	{
+		if (xQueueReceive(xQueue_sample, &input_sample, portMAX_DELAY) == pdTRUE)
+		{
+			xSemaphoreTake(xMutex, portMAX_DELAY);
+			colors[RED] = (input_sample & 0xF) * 16;
+			colors[GREEN] = ((input_sample & 0xF0) >> 4) * 16;
+			colors[BLUE] = ((input_sample & 0xF00) >> 8) * 16;
+			xSemaphoreGive(xMutex);
+
+			vTaskResume(neopixel_handle);
+		}
+
+		vTaskDelay(TickDelay);
+	}
+}
+
+
+static void neopixel_task(void *pvParameters)
+{
+	PRINTF("Inside neopixel task\n");
+	xSemaphoreTake(xMutex, portMAX_DELAY);
+	Neo_loop(colors);
+	xSemaphoreGive(xMutex);
+
+	vTaskSuspend(NULL);
+}
+
+
