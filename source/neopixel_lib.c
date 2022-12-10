@@ -7,6 +7,9 @@
  *
  * Author: Ritika Ramchandani <ritika.ramchandani@colorado.edu>
  *
+ * Reference: https://github.com/ErichStyger/mcuoneclipse/tree/master/Examples/Eclipse/
+ * FRDM-KL25Z/FRDM-KL25Z_NeoPixel
+ *
  */
 
 #include "neopixel_lib.h"
@@ -20,6 +23,9 @@
 /* For bit 0, to get a high of 0.7us out of 1.25us
  * 32/60 clock ticks need to held high */
 #define BIT_1 (32)
+
+/* Delay between each update of the LED strip */
+#define NEOSTRIP_DELAY (100000)
 
 #define RESET (0)
 #define NUM_COLOR_BITS (8) /* Number of bits in a color (r/g/b) value */
@@ -77,7 +83,7 @@ void Neo_ClearAllPixel(uint16_t* LED_buffer)
 
 
 /*
- * Neo_SetColor: Set the buffer value of the given pixel index with
+ * Neo_SetColor: Sets the buffer value of the given pixel index with
  * the provided color
  *
  * Parameters:
@@ -111,7 +117,7 @@ static uint32_t Neo_SetColor(uint16_t* LED_buffer, uint32_t in_idx, uint8_t colo
 
 
 /*
- * Neo_SetColor: Calculate the color (r/g/b) value of
+ * Neo_GetColor: Calculates the color (r/g/b) value of
  * a given LED based on the values stored in the LED_buffer
  *
  * Parameters:
@@ -149,7 +155,7 @@ void Neo_SetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, RGB colors)
 		return;
 	}
 
-
+  /* Calculate index of the required LED, including trailing and leading dummy bits */
 	buff_idx = NEO_BITS_INIT + (pixel_idx * NEO_BITS_LEDS);
 
 	/* The order for transmission for WS2812 is Green,
@@ -162,31 +168,39 @@ void Neo_SetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, RGB colors)
 }
 
 
+/* Dim pixel brightness of the given LED */
 void Neo_PixelBrightness(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t percent)
 {
 	uint8_t colors[NUM_COLORS];
   RGB dimmed_colors;
+
+  /* Get pixel values */
   Neo_GetPixel(LED_buffer, pixel_idx, colors);
 
+  /* Calculate new dimmed LED values for r/g/b */
   for(uint8_t i = 0; i < NUM_COLORS; i++)
   {
   	dimmed_colors[i] = ((uint32_t)colors[i] * (100-percent))/100;
   }
 
+  /* Set new values for the given pixel */
   Neo_SetPixel(LED_buffer, pixel_idx, dimmed_colors);
 }
 
 
-
+/* Get RGB values of the desried pixel */
 void Neo_GetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t* colors)
 {
+	/* Out-of-range check */
   if (pixel_idx >= NEO_NUM_LEDS)
   {
     return;
   }
 
+  /* Calculate index of the required LED, including leading dummy bits */
   pixel_idx = NEO_BITS_INIT + (pixel_idx * NEO_BITS_LEDS);
 
+  /* Get individual array values for the pixel */
   for(uint8_t i = 0; i < NUM_COLORS; i++)
   {
   	colors[i] = Neo_GetColor(LED_buffer, pixel_idx + (i << 3));
@@ -195,22 +209,30 @@ void Neo_GetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t* colors)
 }
 
 
+/* Update LED strip to be a color trail */
 void Neo_PixelTrail(uint16_t* LED_buffer, RGB colors, uint32_t first_pixel_idx, uint32_t last_pixel_idx,
 		uint32_t num_trail, uint8_t percent_dim)
 {
+	/* Variable to keep track of current pixel */
   uint32_t pixel_num = 0;
+
+  /* Cycle through the pixels to be update including the trail tail */
   for(pixel_num = first_pixel_idx; pixel_num <= last_pixel_idx + num_trail + 1; pixel_num++)
   {
+  	/* Move brightest pixel */
     if(pixel_num <= last_pixel_idx)
     {
       Neo_SetPixel(LED_buffer, pixel_num, colors);
     }
+
+    /* Clear tail of the trail (incoming pixel) */
     if(pixel_num - first_pixel_idx > num_trail &&
     		pixel_num - (num_trail + 1) <= last_pixel_idx)
     {
       Neo_SetPixel(LED_buffer, (pixel_num - num_trail - 1), clear_pixel);
     }
 
+    /* Dim all the pixels in the trail */
     for(uint8_t i = 0; i < num_trail; i++)
     {
     	if ((pixel_num - first_pixel_idx > i) && (pixel_num - (i + 1) <= last_pixel_idx))
@@ -218,10 +240,12 @@ void Neo_PixelTrail(uint16_t* LED_buffer, RGB colors, uint32_t first_pixel_idx, 
         Neo_PixelBrightness(LED_buffer, pixel_num - i - 1, percent_dim);
       }
     }
+
+    /* Update strip with new values */
     Neo_UpdateStrip();
 
     /* Delay */
-    for(uint32_t i = 0; i< 100000; i++);
+    for(uint32_t i = 0; i< NEOSTRIP_DELAY; i++);
   }
 }
 

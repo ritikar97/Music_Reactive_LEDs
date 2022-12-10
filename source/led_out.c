@@ -7,6 +7,7 @@
  *
  * Author: Ritika Ramchandani <ritika.ramchandani@colorado.edu>
  *
+ * Reference: https://www.nxp.com/docs/en/application-note/AN5121.pdf
  */
 #include "neopixel_lib.h"
 #include "common_defines.h"

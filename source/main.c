@@ -58,32 +58,39 @@
 #define ADC_task_PRIORITY (configMAX_PRIORITIES - 1)
 #define neopixel_task_PRIORITY (configMAX_PRIORITIES - 3)
 #define process_task_PRIORITY (configMAX_PRIORITIES - 2)
+
+/* For WS128B, the order for storing color values
+ * is green, red and blue */
 #define GREEN (0)
 #define RED (1)
 #define BLUE (2)
+
+/* Constant multiplier to calculate RGB values */
+#define CONST_MUL (16)
+#define RED_MASK (0xF) /* Mask to calculate red value */
+#define GREEN_MASK (0xF0) /* Mask to calculate green value */
+#define BLUE_MASK (0xF00) /* Mask to calculate blue value */
+
+/* Delay for 1ms in number of ticks */
+#define DELAY_1MS (1000)
 
 /* Task Prototypes */
 static void ADC_task(void *pvParameters);
 static void neopixel_task(void *pvParameters);
 static void process_task(void *pvParameters);
 
+/* Task handles for accessing the tasks later if needed */
 TaskHandle_t ADC_handle;
 TaskHandle_t neopixel_handle;
 TaskHandle_t process_handle;
 
-QueueHandle_t xQueue_sample;
-SemaphoreHandle_t xMutex;
+QueueHandle_t xQueue_sample; /* Handle to access queue */
+SemaphoreHandle_t xMutex; /* Handle to access mutex */
 
-uint8_t colors[NUM_COLORS] = {255, 255, 255};
+/* Array to store color values */
+uint8_t colors[NUM_COLORS];
 
-
-/* TODO: insert other include files here. */
-
-/* TODO: insert other definitions and declarations here. */
-
-/*
- * @brief   Application entry point.
- */
+/* Main function that spwans three threads to run in parallel with different priorities */
 int main(void) {
 
     /* Init board hardware. */
@@ -95,8 +102,10 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
-
+    /* Create mutex*/
     xMutex = xSemaphoreCreateMutex();
+
+    /* Initialize peripherals */
     clock_init();
     ADC_init();
     TPM1_init();
@@ -105,74 +114,82 @@ int main(void) {
     TPM0_init();
     Neo_output();
 
+    /* Create queue */
     xQueue_sample = xQueueCreate(1, sizeof(uint32_t));
 
+    /* Creating three tasks:
+     * One for analog sampling (audio collection)
+     * One for processing the collected samples
+     * One for updating the neopixel LED strip with a new trail
+     */
     xTaskCreate(ADC_task, "ADC_task", 512, NULL, ADC_task_PRIORITY, &ADC_handle);
-
     xTaskCreate(neopixel_task, "neopixel_task", 512, NULL, neopixel_task_PRIORITY, &neopixel_handle);
-
     xTaskCreate(process_task, "process_task", 512, NULL, process_task_PRIORITY, &process_handle);
 
+    /* Spawn the three threads and start in parallel.
+     * The tasks are run according to their priorities */
     vTaskStartScheduler();
-    while(1)
-    {
-    }
+    while(1);
 
     return 0 ;
 }
 
 
+/* Task for analog sampling (audio collection) */
 static void ADC_task(void *pvParameters)
 {
 	uint32_t input_sample;
 
 	while(1)
 	{
+		/* Collect ADC sample and write it into the queue */
 		input_sample = ADC_sampling();
 		if(xQueueOverwrite(xQueue_sample, (void*)&input_sample) != pdPASS)
 		{
 			PRINTF("Could not write to queue\n");
 		}
-		vTaskDelay(1000/portTICK_PERIOD_MS);
+		vTaskDelay(DELAY_1MS/portTICK_PERIOD_MS);
 	}
 }
 
 
+/* Task processing the collected samples */
 static void process_task(void *pvParameters)
 {
 	uint32_t input_sample = 0;
-	//uint32_t TickDelay = pdMS_TO_TICKS(30);
 
-	//Wait on Queue Receieve
 	while(1)
 	{
-		//vTaskDelay(30/portTICK_PERIOD_MS);
+		/* Wait for queue to receive the input sample */
 		if(xQueueReceive(xQueue_sample, (void*)&input_sample, 0) == pdTRUE)
 		{
+			/* Protect colors with a mutex to prevent writing while
+			 * another task is reading the array */
 			xSemaphoreTake(xMutex, portMAX_DELAY);
-			colors[RED] = (input_sample & 0xF) * 16;
-			colors[GREEN] = ((input_sample & 0xF0) >> 4) * 16;
-			colors[BLUE] = ((input_sample & 0xF00) >> 8) * 16;
+
+			/* Update color values based on logic of choice */
+			colors[RED] = (input_sample & RED_MASK) * CONST_MUL;
+			colors[GREEN] = ((input_sample & GREEN_MASK) >> 4) * CONST_MUL;
+			colors[BLUE] = ((input_sample & BLUE_MASK) >> 8) * CONST_MUL;
 			xSemaphoreGive(xMutex);
 
+			/* Once color values have been updated, neopixel task can be called */
 			vTaskResume(neopixel_handle);
 		}
 
-		vTaskDelay(1000/portTICK_PERIOD_MS);
+		vTaskDelay(DELAY_1MS/portTICK_PERIOD_MS);
 	}
 }
 
 
 static void neopixel_task(void *pvParameters)
 {
-	//vTaskSuspend(NULL);
-
 	while(1)
 	{
 		xSemaphoreTake(xMutex, portMAX_DELAY);
-		Neo_loop(colors);
+		Neo_loop(colors); /* Update LED strip*/
 		xSemaphoreGive(xMutex);
-		vTaskSuspend(NULL);
+		vTaskSuspend(NULL); /* Suspend task until new values are calculated */
 	}
 
 }

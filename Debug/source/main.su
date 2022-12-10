@@ -1,4 +1,4 @@
-../source/main.c:87:5:main	16	static
-../source/main.c:125:13:ADC_task	24	static
-../source/main.c:141:13:process_task	24	static
-../source/main.c:166:13:neopixel_task	16	static
+../source/main.c:94:5:main	16	static
+../source/main.c:139:13:ADC_task	24	static
+../source/main.c:157:13:process_task	24	static
+../source/main.c:185:13:neopixel_task	16	static
