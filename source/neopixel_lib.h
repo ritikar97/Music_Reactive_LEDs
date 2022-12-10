@@ -2,8 +2,7 @@
  * File: neopixel_lib.h
  *
  * This header file contains delcarations of functions developed for
- * handling data sent to / received from the Neopixel strip using
- * WS128B protocol.
+ * WS2812B protocol.
  *
  * Author: Ritika Ramchandani <ritika.ramchandani@colorado.edu>
  *

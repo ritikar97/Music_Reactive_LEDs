@@ -3,7 +3,7 @@
  *
  * This source file contains a function library developed for
  * handling data sent to / received from the Neopixel strip using
- * WS128B protocol.
+ * WS2812B protocol.
  *
  * Author: Ritika Ramchandani <ritika.ramchandani@colorado.edu>
  *

@@ -30,7 +30,7 @@
 /* TPM0 Trigger for DMA */
 #define TPM0_TRIG (24)
 
-/* For WS1281B time period of 1.25us, 48MHz requires 60 ticks */
+/* For WS28121B time period of 1.25us, 48MHz requires 60 ticks */
 #define TPM0_MOD_VAL (60)
 
 /* Mask to write set the desired bit */
