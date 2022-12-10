@@ -7,9 +7,9 @@ Code for Final Project of PES, Fall 2022, ECEN-5813(B)
 - [Project Functionality](#project-functionality)
 - [Report](#report)
 - [Challenges](#challenges)
-- [Demo Video](#demo-video)
+- [Project Videos](#project-videos)
 - [References](#references)
-- [Acknowledgements](#acknowledgement)
+- [Acknowledgements](#acknowledgements)
 
 
 ## Project Functionality 
@@ -29,9 +29,10 @@ A brief report of the project can be found [here](https://github.com/ritikar97/M
 I ran into several memory (heap and stack overflow challenges while working with the LED Buffer and the stack sizes for spawing threads.
 Initializing DMA and TPM0 to continuously generate PWM pulses with precise timing also required considerable effort. 
 
-## Demo Video
+## Project Videos
 
-
+[Hardware Setup](https://github.com/ritikar97/Music_Reactive_LEDs/blob/main/Hardware-Setup.MOV)  
+[Demo Video](https://github.com/ritikar97/Music_Reactive_LEDs/blob/main/Demo.MOV)
 
 ## References 
 
