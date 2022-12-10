@@ -182,6 +182,7 @@ static void process_task(void *pvParameters)
 }
 
 
+/* Task updating the neopixel LED strip with a new trail */
 static void neopixel_task(void *pvParameters)
 {
 	while(1)
