@@ -18,19 +18,11 @@
 
 
 
-#define MOD_VAL (48000) /* (48MHz / 0.33 Hz) : Sampling takes place once in 3 seconds */
+#define MOD_VAL (48000) /* (48MHz / 1000 Hz) : Sampling takes place once in 1 ms */
 #define ADC_POS (20) /* PORT E, pin 20 is used an input for ADC */
 #define SAMPLING_SIZE (1024) /* ADC sampling size */
 #define AD0_CH (0) /* ADC channel 0 is used to collect ADC input */
 #define ADC0_TPM1_TRIG (9) /* Using TPM1 as hardware trigger for ADC */
-#define SAMPLING_RATE (96000) /* Sampling frequency */
-
-
-/* Buffer to hold ADC samples */
-uint16_t adc_sample_buff[SAMPLING_SIZE];
-int adc_period;
-uint32_t min = 50000;
-uint32_t max = 48000;
 
 
 /* TPM1 Initialization */
@@ -88,35 +80,14 @@ uint32_t ADC_sampling()
 	/* Start TPM1 */
 	TPM1 -> SC |= TPM_SC_CMOD(1);
 
-	/* Check for conversion completion and fill buffer*/
-	for(uint32_t i = 0; i < 200; i++)
-	{
+	/* Check for conversion completion and read sample value*/
 		/* Wait on completion flag */
 		while(!(ADC0 -> SC1[0] & ADC_SC1_COCO_MASK));
 		adc_sample = ADC0 -> R[0];
-		if(adc_sample > max)
-		{
-			max = adc_sample;
-		}
-		if(adc_sample < min)
-		{
-			min = adc_sample;
-		}
-
-	}
 
 	/* Stop TPM1 */
 	TPM1 -> SC |= TPM_SC_CMOD(0);
 
-	/* Get ADC period in terms of number of samples */
-	//adc_period = autocorrelate_detect_period(adc_sample_buff, SAMPLING_SIZE, kAC_16bps_unsigned);
-
-	/* Print analysis data */
-	//DAC_analysis();
-	//ADC_analysis();
-	//for(uint32_t i = 0; i < 1024; i++)
-	//{
-	 //}
 	return adc_sample;
 }
 

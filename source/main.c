@@ -38,6 +38,7 @@
 #include "task.h"
 #include "queue.h"
 #include "timers.h"
+#include "semphr.h"
 
 /* Freescale includes. */
 #include "fsl_device_registers.h"
@@ -52,16 +53,11 @@
 #include "analog_in.h"
 #include "neopixel_lib.h"
 #include "led_out.h"
-#include "process_data.h"
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "semphr.h"
 
 /* Task priorities. */
 #define ADC_task_PRIORITY (configMAX_PRIORITIES - 1)
-#define neopixel_task_PRIORITY (configMAX_PRIORITIES - 2)
-#define process_tak_PRIORITY (configMAX_PRIORITIES - 3)
+#define neopixel_task_PRIORITY (configMAX_PRIORITIES - 3)
+#define process_task_PRIORITY (configMAX_PRIORITIES - 2)
 #define GREEN (0)
 #define RED (1)
 #define BLUE (2)
@@ -78,7 +74,7 @@ TaskHandle_t process_handle;
 QueueHandle_t xQueue_sample;
 SemaphoreHandle_t xMutex;
 
-uint8_t colors[NUM_COLORS];
+uint8_t colors[NUM_COLORS] = {255, 255, 255};
 
 
 /* TODO: insert other include files here. */
@@ -101,7 +97,6 @@ int main(void) {
 
 
     xMutex = xSemaphoreCreateMutex();
-    PRINTF("Hello World\n");
     clock_init();
     ADC_init();
     TPM1_init();
@@ -112,10 +107,11 @@ int main(void) {
 
     xQueue_sample = xQueueCreate(1, sizeof(uint32_t));
 
-    xTaskCreate(ADC_task, "ADC_task", configMINIMAL_STACK_SIZE + 10, NULL, ADC_task_PRIORITY, &ADC_handle);
-    xTaskCreate(neopixel_task, "neopixel_task", configMINIMAL_STACK_SIZE + 10, NULL, neopixel_task_PRIORITY, &neopixel_handle);
-    xTaskCreate(process_task, "process_task", configMINIMAL_STACK_SIZE + 10, NULL, ADC_task_PRIORITY, &process_handle);
+    xTaskCreate(ADC_task, "ADC_task", 512, NULL, ADC_task_PRIORITY, &ADC_handle);
 
+    xTaskCreate(neopixel_task, "neopixel_task", 512, NULL, neopixel_task_PRIORITY, &neopixel_handle);
+
+    xTaskCreate(process_task, "process_task", 512, NULL, process_task_PRIORITY, &process_handle);
 
     vTaskStartScheduler();
     while(1)
@@ -128,18 +124,16 @@ int main(void) {
 
 static void ADC_task(void *pvParameters)
 {
-	uint32_t input_sample = ADC_sampling();
-
-	uint32_t TickDelay = pdMS_TO_TICKS(20);
-	PRINTF("Inside ADC task\n");
+	uint32_t input_sample;
 
 	while(1)
 	{
-		if(xQueueSend(xQueue_sample, &input_sample, 0) != pdPASS)
+		input_sample = ADC_sampling();
+		if(xQueueOverwrite(xQueue_sample, (void*)&input_sample) != pdPASS)
 		{
-			PRINTF("ERROR in adding to queue\n");
+			PRINTF("Could not write to queue\n");
 		}
-		vTaskDelay(TickDelay);
+		vTaskDelay(1000/portTICK_PERIOD_MS);
 	}
 }
 
@@ -147,13 +141,13 @@ static void ADC_task(void *pvParameters)
 static void process_task(void *pvParameters)
 {
 	uint32_t input_sample = 0;
-	uint32_t TickDelay = pdMS_TO_TICKS(30);
-	PRINTF("Inside process task\n");
+	//uint32_t TickDelay = pdMS_TO_TICKS(30);
 
 	//Wait on Queue Receieve
 	while(1)
 	{
-		if (xQueueReceive(xQueue_sample, &input_sample, portMAX_DELAY) == pdTRUE)
+		//vTaskDelay(30/portTICK_PERIOD_MS);
+		if(xQueueReceive(xQueue_sample, (void*)&input_sample, 0) == pdTRUE)
 		{
 			xSemaphoreTake(xMutex, portMAX_DELAY);
 			colors[RED] = (input_sample & 0xF) * 16;
@@ -164,19 +158,23 @@ static void process_task(void *pvParameters)
 			vTaskResume(neopixel_handle);
 		}
 
-		vTaskDelay(TickDelay);
+		vTaskDelay(1000/portTICK_PERIOD_MS);
 	}
 }
 
 
 static void neopixel_task(void *pvParameters)
 {
-	PRINTF("Inside neopixel task\n");
-	xSemaphoreTake(xMutex, portMAX_DELAY);
-	Neo_loop(colors);
-	xSemaphoreGive(xMutex);
+	//vTaskSuspend(NULL);
 
-	vTaskSuspend(NULL);
+	while(1)
+	{
+		xSemaphoreTake(xMutex, portMAX_DELAY);
+		Neo_loop(colors);
+		xSemaphoreGive(xMutex);
+		vTaskSuspend(NULL);
+	}
+
 }
 
 

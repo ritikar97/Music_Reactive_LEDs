@@ -40,11 +40,11 @@ void ADC_init();
 
 /*
  * ADC_sampling: Function to sample input analog wave
- * and store the values in a buffer
+ * and return the sampled value
  *
  * Parameters: none
  *
- * Returns: void
+ * Returns: Sampled Value
  */
 uint32_t ADC_sampling();
 

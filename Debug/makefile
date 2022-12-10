@@ -32,7 +32,7 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := frdmkl25z_rtos_examples_freertos_hello_project
+BUILD_ARTIFACT_NAME := Music_Reactive_LEDs
 BUILD_ARTIFACT_EXTENSION := axf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
@@ -44,24 +44,24 @@ all:
 	+@$(MAKE) --no-print-directory main-build && $(MAKE) --no-print-directory post-build
 
 # Main-build Target
-main-build: frdmkl25z_rtos_examples_freertos_hello_project.axf
+main-build: Music_Reactive_LEDs.axf
 
 # Tool invocations
-frdmkl25z_rtos_examples_freertos_hello_project.axf: $(OBJS) $(USER_OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
+Music_Reactive_LEDs.axf: $(OBJS) $(USER_OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -Xlinker --gc-sections -Xlinker -Map="frdmkl25z_rtos_examples_freertos_hello_project.map" -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m0plus -mthumb -T frdmkl25z_rtos_examples_freertos_hello_project_Debug.ld -o "frdmkl25z_rtos_examples_freertos_hello_project.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -Xlinker --gc-sections -Xlinker -Map="Music_Reactive_LEDs.map" -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m0plus -mthumb -T frdmkl25z_rtos_examples_freertos_hello_project_Debug.ld -o "Music_Reactive_LEDs.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) frdmkl25z_rtos_examples_freertos_hello_project.axf
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) Music_Reactive_LEDs.axf
 	-@echo ' '
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "frdmkl25z_rtos_examples_freertos_hello_project.axf"; # arm-none-eabi-objcopy -v -O binary "frdmkl25z_rtos_examples_freertos_hello_project.axf" "frdmkl25z_rtos_examples_freertos_hello_project.bin" ; # checksum -p MKL25Z128xxx4 -d "frdmkl25z_rtos_examples_freertos_hello_project.bin";
+	-arm-none-eabi-size "Music_Reactive_LEDs.axf"; # arm-none-eabi-objcopy -v -O binary "Music_Reactive_LEDs.axf" "Music_Reactive_LEDs.bin" ; # checksum -p MKL25Z128xxx4 -d "Music_Reactive_LEDs.bin";
 	-@echo ' '
 
 .PHONY: all clean dependents post-build

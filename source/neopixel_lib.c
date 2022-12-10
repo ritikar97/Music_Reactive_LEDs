@@ -1,49 +1,70 @@
 /*
- * neopixel_lib.c
+ * File: neopixel_lib.c
  *
- *  Created on: 7 Dec 2022
- *      Author: ritik
+ * This source file contains a function library developed for
+ * handling data sent to / received from the Neopixel strip using
+ * WS128B protocol.
+ *
+ * Author: Ritika Ramchandani <ritika.ramchandani@colorado.edu>
+ *
  */
 
 #include "neopixel_lib.h"
 #include "led_out.h"
 #include "common_defines.h"
 
+/* For bit 0, to get a high of 0.35us out of 1.25us
+ * 17/60 clock ticks need to held high */
+#define BIT_0 (17)
 
-#define BIT_0 (17) /* 17:60::0.35:1.25 */
-#define BIT_1 (32) /* 32:60::0.7/1.3 */
+/* For bit 0, to get a high of 0.7us out of 1.25us
+ * 32/60 clock ticks need to held high */
+#define BIT_1 (32)
+
 #define RESET (0)
-#define NUM_COLOR_BITS (8)
-#define GET_MSB (0x80)
+#define NUM_COLOR_BITS (8) /* Number of bits in a color (r/g/b) value */
+#define GET_MSB (0x80) /* Mask to get MSB of the byte */
 
+/* RGB values = 0, to clear the pixel */
 RGB clear_pixel = {0, 0, 0};
 
+
+/*
+ * clear_LED_buffer: Clears the LED buffer and sets all values to 0
+ *
+ * Parameters:
+ * LED_buffer - pointer to the RGB values of each individual pixel
+ *
+ * Returns: void
+ */
 static void clear_LED_buffer(uint16_t* LED_buffer)
 {
-  uint32_t i;
-
-  for(i = 0; i < NEO_BITS_INIT; i++)
+  /* Set initial LED buffer bits to 0 - used for clearing
+   * leftover trails */
+	for(uint32_t i = 0; i < NEO_BITS_INIT; i++)
   {
-  	LED_buffer[i] = 0; /* pre sequence */
+  	LED_buffer[i] = 0;
   }
 
+	/* Clear all LEDs on the strip */
   Neo_ClearAllPixel(LED_buffer);
 
-  for(i = NEO_NUM_LEDS + (NEO_NUM_LEDS * NEO_BITS_LEDS); i < BUFF_SIZE; i++)
+  /* Sending dummy 0s to give data the time to latch on */
+  for(uint32_t i = NEO_NUM_LEDS + (NEO_NUM_LEDS * NEO_BITS_LEDS); i < BUFF_SIZE; i++)
   {
-  	LED_buffer[i] = 0; /* post sequence */
+  	LED_buffer[i] = 0;
   }
 }
 
 
+/* Clear buffer as a part of initialization */
 void Neo_init(uint16_t* LED_buffer)
 {
 	clear_LED_buffer(LED_buffer);
-	//TPM0_init();
-	//DMA_init();
 }
 
 
+/* Clear all LEDs on the strip */
 void Neo_ClearAllPixel(uint16_t* LED_buffer)
 {
 	RGB val = {0, 0, 0};
@@ -55,10 +76,24 @@ void Neo_ClearAllPixel(uint16_t* LED_buffer)
 }
 
 
+/*
+ * Neo_SetColor: Set the buffer value of the given pixel index with
+ * the provided color
+ *
+ * Parameters:
+ * LED_buffer - pointer to the RGB values of each individual pixel
+ * in_idx - LED index on the LED strip
+ * color - RGB values to be written to the desired LED index
+ *
+ * Returns: Index of the next LED on the strip
+ */
 static uint32_t Neo_SetColor(uint16_t* LED_buffer, uint32_t in_idx, uint8_t color)
 {
+	/* For each color (r/g/b), calculate the 8 byte LED_buffer value */
 	for(uint8_t i = 0 ; i < NUM_COLOR_BITS; i++)
 	{
+		/* Using binary representation of the color to
+		 * calculate the 8-byte value to be sent to the PWM */
 		if(color & GET_MSB)
 		{
 			LED_buffer[in_idx] = BIT_1;
@@ -75,9 +110,21 @@ static uint32_t Neo_SetColor(uint16_t* LED_buffer, uint32_t in_idx, uint8_t colo
 }
 
 
+/*
+ * Neo_SetColor: Calculate the color (r/g/b) value of
+ * a given LED based on the values stored in the LED_buffer
+ *
+ * Parameters:
+ * LED_buffer - pointer to the RGB values of each individual pixel
+ * in_idx - LED index on the LED strip
+ *
+ * Returns: R/G/B value of the desired LED index
+ */
 static uint8_t Neo_GetColor(uint16_t* LED_buffer, uint32_t in_idx)
 {
 	uint8_t color = 0;
+	/* Calculate 8-bit value of the color, based on its
+	 * 8-byte representation in the LED_buffer */
 	for(uint8_t i = 0; i < NUM_COLOR_BITS; i++)
 	{
 	   color <<= 1;
@@ -85,20 +132,23 @@ static uint8_t Neo_GetColor(uint16_t* LED_buffer, uint32_t in_idx)
 	   {
 	      color |= 1;
 	    }
-	   in_idx++; /* next bit */
+	   in_idx++; /* Next bit */
 	 }
 	return color;
 }
 
 
+/* Set the given pixel in the LED_buffer with the desired color */
 void Neo_SetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, RGB colors)
 {
 	uint32_t buff_idx = 0;
 
+	/* Out-of-range check */
 	if(pixel_idx >= NEO_NUM_LEDS)
 	{
 		return;
 	}
+
 
 	buff_idx = NEO_BITS_INIT + (pixel_idx * NEO_BITS_LEDS);
 
@@ -110,13 +160,6 @@ void Neo_SetPixel(uint16_t* LED_buffer, uint32_t pixel_idx, RGB colors)
 		buff_idx = Neo_SetColor(LED_buffer, buff_idx, colors[i]);
 	}
 }
-
-
-//void Neo_Transfer(void)
-//{
-//	//DMA0 -> DMA[0].DCR |= DMA_DCR_ERQ_MASK;
-//
-//}
 
 
 void Neo_PixelBrightness(uint16_t* LED_buffer, uint32_t pixel_idx, uint8_t percent)

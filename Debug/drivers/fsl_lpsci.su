@@ -1,4 +1,4 @@
-C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\frdmkl25z_rtos_examples_freertos_hello_project\CMSIS/core_cm0plus.h:745:22:NVIC_EnableIRQ	16	static
+C:\Users\ritik\Documents\MCUXpressoIDE_11.5.1_7266\workspace\Music_Reactive_LEDs\CMSIS/core_cm0plus.h:745:22:NVIC_EnableIRQ	16	static
 ../drivers/fsl_clock.h:584:20:CLOCK_EnableClock	24	static
 ../drivers/fsl_clock.h:595:20:CLOCK_DisableClock	24	static
 ../drivers/fsl_common.h:212:20:EnableIRQ	16	static
